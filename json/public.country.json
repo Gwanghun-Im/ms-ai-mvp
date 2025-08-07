@@ -1,0 +1,28 @@
+{
+    "schema": "public",
+    "table": "country",
+    "columns": [
+        {
+            "name": "country_id",
+            "type": "integer",
+            "nullable": false,
+            "default": "nextval('country_country_id_seq'::regclass)"
+        },
+        {
+            "name": "country",
+            "type": "text",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "last_update",
+            "type": "timestamp with time zone",
+            "nullable": false,
+            "default": "now()"
+        }
+    ],
+    "primary_key": [
+        "country_id"
+    ],
+    "foreign_keys": []
+}

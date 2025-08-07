@@ -1,0 +1,56 @@
+{
+    "schema": "",
+    "table": "",
+    "columns": [
+        {
+            "name": "fid",
+            "type": "integer",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "title",
+            "type": "text",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "description",
+            "type": "text",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "category",
+            "type": "text",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "price",
+            "type": "numeric",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "length",
+            "type": "smallint",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "rating",
+            "type": "USER-DEFINED",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "actors",
+            "type": "text",
+            "nullable": true,
+            "default": null
+        }
+    ],
+    "primary_key": [],
+    "foreign_keys": []
+}

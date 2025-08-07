@@ -1,0 +1,79 @@
+{
+    "schema": "public",
+    "table": "customer",
+    "columns": [
+        {
+            "name": "customer_id",
+            "type": "integer",
+            "nullable": false,
+            "default": "nextval('customer_customer_id_seq1'::regclass)"
+        },
+        {
+            "name": "store_id",
+            "type": "smallint",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "first_name",
+            "type": "text",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "last_name",
+            "type": "text",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "email",
+            "type": "text",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "address_id",
+            "type": "smallint",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "activebool",
+            "type": "boolean",
+            "nullable": false,
+            "default": "true"
+        },
+        {
+            "name": "create_date",
+            "type": "date",
+            "nullable": false,
+            "default": "('now'::text)::date"
+        },
+        {
+            "name": "last_update",
+            "type": "timestamp with time zone",
+            "nullable": true,
+            "default": "now()"
+        },
+        {
+            "name": "active",
+            "type": "integer",
+            "nullable": true,
+            "default": null
+        }
+    ],
+    "primary_key": [
+        "customer_id"
+    ],
+    "foreign_keys": [
+        {
+            "from": "address_id",
+            "to": "public.address.address_id"
+        },
+        {
+            "from": "store_id",
+            "to": "public.store.store_id"
+        }
+    ]
+}

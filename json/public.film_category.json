@@ -1,0 +1,38 @@
+{
+    "schema": "public",
+    "table": "film_category",
+    "columns": [
+        {
+            "name": "film_id",
+            "type": "smallint",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "category_id",
+            "type": "smallint",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "last_update",
+            "type": "timestamp with time zone",
+            "nullable": false,
+            "default": "now()"
+        }
+    ],
+    "primary_key": [
+        "film_id",
+        "category_id"
+    ],
+    "foreign_keys": [
+        {
+            "from": "category_id",
+            "to": "public.category.category_id"
+        },
+        {
+            "from": "film_id",
+            "to": "public.film.film_id"
+        }
+    ]
+}

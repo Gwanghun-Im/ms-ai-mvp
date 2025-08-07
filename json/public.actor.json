@@ -1,0 +1,34 @@
+{
+    "schema": "public",
+    "table": "actor",
+    "columns": [
+        {
+            "name": "actor_id",
+            "type": "integer",
+            "nullable": false,
+            "default": "nextval('actor_actor_id_seq'::regclass)"
+        },
+        {
+            "name": "first_name",
+            "type": "text",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "last_name",
+            "type": "text",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "last_update",
+            "type": "timestamp with time zone",
+            "nullable": false,
+            "default": "now()"
+        }
+    ],
+    "primary_key": [
+        "actor_id"
+    ],
+    "foreign_keys": []
+}

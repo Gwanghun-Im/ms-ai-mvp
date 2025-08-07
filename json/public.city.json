@@ -1,0 +1,39 @@
+{
+    "schema": "public",
+    "table": "city",
+    "columns": [
+        {
+            "name": "city_id",
+            "type": "integer",
+            "nullable": false,
+            "default": "nextval('city_city_id_seq'::regclass)"
+        },
+        {
+            "name": "city",
+            "type": "text",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "country_id",
+            "type": "smallint",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "last_update",
+            "type": "timestamp with time zone",
+            "nullable": false,
+            "default": "now()"
+        }
+    ],
+    "primary_key": [
+        "city_id"
+    ],
+    "foreign_keys": [
+        {
+            "from": "country_id",
+            "to": "public.country.country_id"
+        }
+    ]
+}

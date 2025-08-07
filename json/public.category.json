@@ -1,0 +1,28 @@
+{
+    "schema": "public",
+    "table": "category",
+    "columns": [
+        {
+            "name": "category_id",
+            "type": "integer",
+            "nullable": false,
+            "default": "nextval('category_category_id_seq'::regclass)"
+        },
+        {
+            "name": "name",
+            "type": "text",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "last_update",
+            "type": "timestamp with time zone",
+            "nullable": false,
+            "default": "now()"
+        }
+    ],
+    "primary_key": [
+        "category_id"
+    ],
+    "foreign_keys": []
+}

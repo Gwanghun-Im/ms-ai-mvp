@@ -1,0 +1,20 @@
+{
+    "schema": "",
+    "table": "",
+    "columns": [
+        {
+            "name": "category",
+            "type": "text",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "total_sales",
+            "type": "numeric",
+            "nullable": true,
+            "default": null
+        }
+    ],
+    "primary_key": [],
+    "foreign_keys": []
+}

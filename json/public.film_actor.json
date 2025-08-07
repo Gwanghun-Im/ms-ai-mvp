@@ -1,0 +1,38 @@
+{
+    "schema": "public",
+    "table": "film_actor",
+    "columns": [
+        {
+            "name": "actor_id",
+            "type": "smallint",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "film_id",
+            "type": "smallint",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "last_update",
+            "type": "timestamp with time zone",
+            "nullable": false,
+            "default": "now()"
+        }
+    ],
+    "primary_key": [
+        "actor_id",
+        "film_id"
+    ],
+    "foreign_keys": [
+        {
+            "from": "actor_id",
+            "to": "public.actor.actor_id"
+        },
+        {
+            "from": "film_id",
+            "to": "public.film.film_id"
+        }
+    ]
+}

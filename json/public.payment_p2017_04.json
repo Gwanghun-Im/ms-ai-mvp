@@ -1,0 +1,57 @@
+{
+    "schema": "public",
+    "table": "payment_p2017_04",
+    "columns": [
+        {
+            "name": "payment_id",
+            "type": "integer",
+            "nullable": false,
+            "default": "nextval('payment_payment_id_seq'::regclass)"
+        },
+        {
+            "name": "customer_id",
+            "type": "smallint",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "staff_id",
+            "type": "smallint",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "rental_id",
+            "type": "integer",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "amount",
+            "type": "numeric",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "payment_date",
+            "type": "timestamp with time zone",
+            "nullable": false,
+            "default": null
+        }
+    ],
+    "primary_key": [],
+    "foreign_keys": [
+        {
+            "from": "customer_id",
+            "to": "public.customer.customer_id"
+        },
+        {
+            "from": "staff_id",
+            "to": "public.staff.staff_id"
+        },
+        {
+            "from": "rental_id",
+            "to": "public.rental.rental_id"
+        }
+    ]
+}

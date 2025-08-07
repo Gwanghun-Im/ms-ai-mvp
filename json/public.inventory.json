@@ -1,0 +1,43 @@
+{
+    "schema": "public",
+    "table": "inventory",
+    "columns": [
+        {
+            "name": "inventory_id",
+            "type": "integer",
+            "nullable": false,
+            "default": "nextval('inventory_inventory_id_seq'::regclass)"
+        },
+        {
+            "name": "film_id",
+            "type": "smallint",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "store_id",
+            "type": "smallint",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "last_update",
+            "type": "timestamp with time zone",
+            "nullable": false,
+            "default": "now()"
+        }
+    ],
+    "primary_key": [
+        "inventory_id"
+    ],
+    "foreign_keys": [
+        {
+            "from": "film_id",
+            "to": "public.film.film_id"
+        },
+        {
+            "from": "store_id",
+            "to": "public.store.store_id"
+        }
+    ]
+}

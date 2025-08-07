@@ -1,0 +1,63 @@
+{
+    "schema": "public",
+    "table": "address",
+    "columns": [
+        {
+            "name": "address_id",
+            "type": "integer",
+            "nullable": false,
+            "default": "nextval('address_address_id_seq'::regclass)"
+        },
+        {
+            "name": "address",
+            "type": "text",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "address2",
+            "type": "text",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "district",
+            "type": "text",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "city_id",
+            "type": "smallint",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "postal_code",
+            "type": "text",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "phone",
+            "type": "text",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "last_update",
+            "type": "timestamp with time zone",
+            "nullable": false,
+            "default": "now()"
+        }
+    ],
+    "primary_key": [
+        "address_id"
+    ],
+    "foreign_keys": [
+        {
+            "from": "city_id",
+            "to": "public.city.city_id"
+        }
+    ]
+}

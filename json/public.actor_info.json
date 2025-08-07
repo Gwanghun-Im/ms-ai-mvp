@@ -1,0 +1,32 @@
+{
+    "schema": "",
+    "table": "",
+    "columns": [
+        {
+            "name": "actor_id",
+            "type": "integer",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "first_name",
+            "type": "text",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "last_name",
+            "type": "text",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "film_info",
+            "type": "text",
+            "nullable": true,
+            "default": null
+        }
+    ],
+    "primary_key": [],
+    "foreign_keys": []
+}

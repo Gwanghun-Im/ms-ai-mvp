@@ -1,0 +1,103 @@
+{
+    "schema": "public",
+    "table": "film",
+    "columns": [
+        {
+            "name": "film_id",
+            "type": "integer",
+            "nullable": false,
+            "default": "nextval('film_film_id_seq'::regclass)"
+        },
+        {
+            "name": "title",
+            "type": "text",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "description",
+            "type": "text",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "release_year",
+            "type": "integer",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "language_id",
+            "type": "smallint",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "original_language_id",
+            "type": "smallint",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "rental_duration",
+            "type": "smallint",
+            "nullable": false,
+            "default": "3"
+        },
+        {
+            "name": "rental_rate",
+            "type": "numeric",
+            "nullable": false,
+            "default": "4.99"
+        },
+        {
+            "name": "length",
+            "type": "smallint",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "replacement_cost",
+            "type": "numeric",
+            "nullable": false,
+            "default": "19.99"
+        },
+        {
+            "name": "rating",
+            "type": "USER-DEFINED",
+            "nullable": true,
+            "default": "'G'::mpaa_rating"
+        },
+        {
+            "name": "last_update",
+            "type": "timestamp with time zone",
+            "nullable": false,
+            "default": "now()"
+        },
+        {
+            "name": "special_features",
+            "type": "ARRAY",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "fulltext",
+            "type": "tsvector",
+            "nullable": false,
+            "default": null
+        }
+    ],
+    "primary_key": [
+        "film_id"
+    ],
+    "foreign_keys": [
+        {
+            "from": "language_id",
+            "to": "public.language.language_id"
+        },
+        {
+            "from": "original_language_id",
+            "to": "public.language.language_id"
+        }
+    ]
+}

@@ -1,0 +1,62 @@
+{
+    "schema": "",
+    "table": "",
+    "columns": [
+        {
+            "name": "id",
+            "type": "integer",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "name",
+            "type": "text",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "address",
+            "type": "text",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "zip code",
+            "type": "text",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "phone",
+            "type": "text",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "city",
+            "type": "text",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "country",
+            "type": "text",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "notes",
+            "type": "text",
+            "nullable": true,
+            "default": null
+        },
+        {
+            "name": "sid",
+            "type": "smallint",
+            "nullable": true,
+            "default": null
+        }
+    ],
+    "primary_key": [],
+    "foreign_keys": []
+}

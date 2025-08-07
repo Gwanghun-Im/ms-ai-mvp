@@ -1,0 +1,39 @@
+{
+    "schema": "public",
+    "table": "store",
+    "columns": [
+        {
+            "name": "store_id",
+            "type": "integer",
+            "nullable": false,
+            "default": "nextval('store_store_id_seq'::regclass)"
+        },
+        {
+            "name": "manager_staff_id",
+            "type": "smallint",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "address_id",
+            "type": "smallint",
+            "nullable": false,
+            "default": null
+        },
+        {
+            "name": "last_update",
+            "type": "timestamp with time zone",
+            "nullable": false,
+            "default": "now()"
+        }
+    ],
+    "primary_key": [
+        "store_id"
+    ],
+    "foreign_keys": [
+        {
+            "from": "address_id",
+            "to": "public.address.address_id"
+        }
+    ]
+}
