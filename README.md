@@ -11,6 +11,8 @@ marp: true
 
 ---
 
+<style scoped>section{font-size:30px;};</style>
+
 #### 1. 프로젝트 개요
 
 문제 정의
@@ -18,10 +20,13 @@ marp: true
 자연어 쿼리를 실행 가능한 SQL 문으로 변환하는 것은 데이터베이스 **스키마의 복잡성**과 **다양한 사용자 의도** 때문에 어려운 과제입니다. 이 프로젝트는 사용자가 자연어를 사용하여 PostgreSQL 데이터베이스를 쿼리할 수 있도록 하여 수동으로 SQL을 작성할 필요를 없애는 것을 목표로 합니다.
 
 대상 사용자
+
 비즈니스 사용자: **SQL 전문 지식 없이** 데이터베이스에서 인사이트를 추출해야 하는 비기술적 사용자.
 개발자: 빠른 프로토타이핑이나 임시 분석을 위해 **SQL 쿼리 생성을 간소화**하려는 기술적 사용자
 
 ---
+
+<style scoped>section{font-size:30px;};</style>
 
 #### 1. 프로젝트 개요
 
@@ -45,6 +50,8 @@ Streamlit 프론트엔드를 통해 사용자 인터랙션을 제공하고, Lang
 
 #### 3: 핵심 구현
 
+<style scoped>section{font-size:30px;};</style>
+
 <!-- - RAG 구현: Azure AI Search를 통해 스키마 조각과 유사 쿼리를 검색하고, Azure OpenAI를 통해 문맥에 맞는 SQL을 생성하여 정확도를 높입니다. -->
 
 - **안전한 쿼리 실행**: SELECT 전용 트랜잭션, 실행 시간 제한, SQL 검증을 통해 비인가 데이터베이스 작업을 방지합니다.
@@ -59,20 +66,24 @@ Streamlit 프론트엔드를 통해 사용자 인터랙션을 제공하고, Lang
 
 🏪🏬 Pagila (PostgreSQL Sample Database)
 
-**DVD rental database to demonstrate the features of PostgreSQL.**
+- DVD rental database to demonstrate the features of PostgreSQL.
 
 ![bg left:45% 100%](markdown/pagila.png)
 
-[Web App](gwanghun-webapp-001-bmdshddfbme0hng7.westus3-01.azurewebsites.net)
+[Web App](https://gwanghun-webapp-001-bmdshddfbme0hng7.westus3-01.azurewebsites.net/)
 
 ---
 
 #### 5. 향후 개선 및 확장 계획
 
-- 고급 RAG: 벡터 검색 기능을 개선하고 임베딩을 미세 조정하여 스키마 및 쿼리 매칭 정확도를 높입니다.
+<style scoped>section{font-size:30px;};</style>
+
+- RAG
+  - 다양한 쿼리 sample을 vector store에 저장하여 Few-shot 예제를 리트리버에 적용
+  - 벡터 검색 기능을 개선하고 임베딩을 **파인튜닝**하여 스키마 및 쿼리 매칭 정확도 향상.
 - 쿼리 최적화: 대규모 데이터셋에서 성능을 향상시키기 위해 SQL 쿼리 최적화 기술을 도입합니다.
-- UI 개선: Streamlit 앱에 쿼리 기록 저장, 쿼리 편집, 시각화 옵션(예: 차트) 추가.
-- 모델 미세 조정: 비용 효율성과 빠른 추론을 위해 소규모 LLM을 미세 조정.
+- UI 개선: 쿼리 기록 저장, 쿼리 편집,페이지네이션, 시각화 옵션(예: 차트) 추가.
+- 사용자별 DB 접근제한: 사용가능한 테이블, 컬럼에 대해 사용자별 권한 확인
 
 ---
 

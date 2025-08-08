@@ -1,5 +1,9 @@
 """
-llm.py
+LLM 연동 및 검색 유틸리티
+
+- Azure OpenAI를 이용한 NL→SQL 생성(`nl2sql`)
+- Azure Translator를 이용한 한→영 번역(`translator`)
+- Azure Cognitive Search를 이용한 스키마/예제 검색
 """
 
 import json
@@ -8,7 +12,6 @@ import uuid
 import requests
 from typing import Any, Dict, List
 from dotenv import load_dotenv
-from openai import AzureOpenAI
 from azure.search.documents import SearchClient
 from azure.search.documents.indexes import SearchIndexerClient
 from azure.search.documents.models import VectorizableTextQuery
@@ -36,7 +39,7 @@ AZURE_TRANSLATOR_KEY = os.getenv("AZURE_TRANSLATOR_KEY")
 
 
 class SQLResponse(BaseModel):
-    """SQL 응답 스키마"""
+    """LLM이 반환해야 하는 JSON 스키마 정의"""
 
     sql: str = Field(description="생성된 SQL 쿼리")
     reasoning_short: str = Field(
@@ -44,8 +47,15 @@ class SQLResponse(BaseModel):
     )
 
 
-def translator(text: str):
-    """한국어 쿼리를 영문쿼리로 변경"""
+def translator(text: str) -> str:
+    """한국어 문장을 영어로 번역합니다(Azure Translator).
+
+    Args:
+        text: 번역할 원문(한국어)
+
+    Returns:
+        번역된 영문 문자열
+    """
     path = "/translate"
     constructed_url = AZURE_TRANSLATOR_ENDPOINT + path
 
@@ -65,6 +75,7 @@ def translator(text: str):
     request = requests.post(
         constructed_url, params=params, headers=headers, json=body, timeout=10
     )
+    request.raise_for_status()
     response = request.json()
 
     return response[0]["translations"][0]["text"]
@@ -73,7 +84,16 @@ def translator(text: str):
 def nl2sql(
     question: str, schema_snippet: List[Dict[str, Any]], max_rows: int = 200
 ) -> Dict[str, Any]:
-    """자연어 to SQL"""
+    """자연어 질문을 기반으로 PostgreSQL SELECT SQL을 생성합니다.
+
+    Args:
+        question: 사용자의 자연어 질문(영문 권장)
+        schema_snippet: 관련 스키마 조각 리스트
+        max_rows: LIMIT 기본값
+
+    Returns:
+        `{"sql": str, "reasoning_short": str}` 형태의 dict
+    """
 
     client = AzureChatOpenAI(
         azure_deployment=AZURE_OPENAI_DEPLOYMENT,
@@ -84,7 +104,7 @@ def nl2sql(
         model_kwargs={"response_format": {"type": "json_object"}},
     )
 
-    # 유사한 쿼리 예제 가져오기
+    # 유사한 쿼리 예제 가져오기 (검색 실패 시 무시)
     examples = ""
     try:
         similar_queries = search_similar_queries_simple(question, top_k=2)
@@ -100,7 +120,7 @@ SQL: {example['sql_query']}
         print(f"예제 검색 실패: {e}")
         examples = ""  # 예제 없이 진행
 
-    # 프롬프트 템플릿 생성 (중괄호 이스케이프 수정)
+    # 프롬프트 템플릿 생성 (중괄호 이스케이프 포함)
     prompt = ChatPromptTemplate.from_messages(
         [
             (
@@ -140,8 +160,8 @@ DDL/DML/권한 변경/트랜잭션/임시테이블 금지.
     return result
 
 
-def search_similar_queries_simple(question: str, top_k: int = 3) -> List[Dict]:
-    """간단한 쿼리 예제 검색 함수"""
+def search_similar_queries_simple(question: str, top_k: int = 3) -> List[Dict[str, str]]:
+    """질문과 유사한 SQL 예제를 벡터 검색으로 조회합니다."""
     print("search start::::", question)
     search_client = SearchClient(
         endpoint=AZURE_SEARCH_ENDPOINT,
@@ -150,7 +170,7 @@ def search_similar_queries_simple(question: str, top_k: int = 3) -> List[Dict]:
     )
 
     try:
-        # 텍스트 검색 (벡터 검색은 나중에 추가)
+        # 텍스트+벡터 검색
         vector_query = VectorizableTextQuery(
             text=question, k_nearest_neighbors=top_k, fields="text_vector"
         )
@@ -174,8 +194,8 @@ def search_similar_queries_simple(question: str, top_k: int = 3) -> List[Dict]:
         return []
 
 
-def rerun_existing_index():
-    """인덱스 재 실행"""
+def rerun_existing_index() -> None:
+    """기존 Azure Cognitive Search 인덱서를 재실행합니다."""
     indexer_client = SearchIndexerClient(
         endpoint=AZURE_SEARCH_ENDPOINT,
         credential=AzureKeyCredential(AZURE_SEARCH_API_KEY),
@@ -183,9 +203,11 @@ def rerun_existing_index():
     indexer_client.run_indexer("rag-table-indexer")
 
 
-def get_schema_snippet(question: str, top_k: int = 3) -> list[dict]:
-    """Get top_k schema tables relevant to the question.
-    Returns a list of dicts with schema, table, columns, primary_key, foreign_keys.
+def get_schema_snippet(question: str, top_k: int = 3) -> list[dict | str]:
+    """질문과 가장 연관성 높은 스키마 조각을 검색합니다.
+
+    Returns:
+        스키마 조각 리스트. 인덱스 설계에 따라 dict 또는 JSON 문자열일 수 있습니다.
     """
     # eng_question = translator(question) if is_korean(question) else question
     search_client = SearchClient(
@@ -198,7 +220,7 @@ def get_schema_snippet(question: str, top_k: int = 3) -> list[dict]:
         vector_query = VectorizableTextQuery(
             text=question, k_nearest_neighbors=10, fields="text_vector"
         )
-        # 단순 텍스트 검색
+        # 텍스트+벡터 통합 검색
         results = search_client.search(
             search_text=question,
             vector_queries=[vector_query],
@@ -206,7 +228,14 @@ def get_schema_snippet(question: str, top_k: int = 3) -> list[dict]:
             include_total_count=True,
         )
 
-        return [result["chunk"] for result in results][:top_k]
+        # 결과는 인덱스 매핑에 따라 dict 혹은 문자열(JSON)일 수 있음
+        out: list[dict | str] = []
+        for r in results:
+            chunk = r["chunk"]
+            # 일부 인덱스는 문자열 JSON을 저장할 수 있으므로 우선 원형으로 반환
+            # 상위 호출부에서 필요 시 json.loads로 파싱
+            out.append(chunk)
+        return out[:top_k]
 
     except Exception as e:
         print(f"검색 오류: {e}")
