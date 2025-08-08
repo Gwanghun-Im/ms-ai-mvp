@@ -9,7 +9,7 @@ from llm import nl2sql, get_schema_snippet, rerun_existing_index, translator
 from utils import is_korean
 
 st.set_page_config(page_title="NL→SQL Chatbot (PostgreSQL)", layout="wide")
-st.title("NL→SQL (PostgreSQL)")
+st.title("NL2SQL (PostgreSQL)")
 
 load_dotenv()
 
@@ -17,7 +17,7 @@ DEFAULT_MAX_ROWS = os.getenv("DEFAULT_MAX_ROWS")
 
 with st.sidebar:
     st.header("Settings")
-    top_k = st.number_input("스키마 Top-K 테이블", 1, 10, 3, 1)
+    # top_k = st.number_input("스키마 Top-K 테이블", 1, 10, 3, 1)
     default_max_rows = int(DEFAULT_MAX_ROWS)
     max_rows = st.number_input("LIMIT(최대 행 수)", 10, 5000, default_max_rows, 10)
     st.caption("DB는 읽기 전용 트랜잭션으로 실행되며, statement_timeout이 적용됩니다.")
@@ -29,7 +29,7 @@ if "messages" not in st.session_state:
     st.session_state.messages = [
         {
             "role": "assistant",
-            "content": "무엇을 조회할지 자연어로 말씀해 주세요. 예) '7월 신규 계좌 수'",
+            "content": "무엇을 조회할지 자연어로 말씀해 주세요. 예) '직원정보를 조회해줘'",
         }
     ]
 
@@ -112,7 +112,7 @@ for i, m in enumerate(st.session_state.messages):
 if update_schema:
     try:
         start_time = time.time()
-        with st.spinner("스키마 캐시를 업데이트하는 중... 잠시만 기다려 주세요."):
+        with st.spinner("스키마를 업데이트하는 중... 잠시만 기다려 주세요."):
             build_schema_cache()
         with st.spinner("인덱스 rerun하는 중... 잠시만 기다려 주세요."):
             rerun_existing_index()
@@ -120,11 +120,11 @@ if update_schema:
         end_time = time.time()
         duration = round(end_time - start_time, 2)
         st.success(
-            f"✅ 스키마 캐시가 성공적으로 업데이트되었습니다! (소요시간: {duration}초)"
+            f"✅ 스키마가 성공적으로 업데이트되었습니다! (소요시간: {duration}초)"
         )
 
     except Exception as e:
-        st.error(f"❌ 스키마 캐시 업데이트 실패: {e}")
+        st.error(f"❌ 스키마 업데이트 실패: {e}")
         st.warning("네트워크 연결이나 데이터베이스 상태를 확인하고 다시 시도해 주세요.")
 
         # 디버깅을 위해 상세 오류 정보 표시 (개발 환경에서만 사용)
@@ -145,7 +145,7 @@ if prompt:
     SCHEMA_SNIPPET = None
     with st.spinner("스키마 확인 중..."):
         try:
-            SCHEMA_SNIPPET = get_schema_snippet(question, top_k=top_k)
+            SCHEMA_SNIPPET = get_schema_snippet(question, top_k=5)
         except Exception as e:
             st.session_state.messages.append(
                 {"role": "assistant", "content": f"스키마 확인 실패: {e}"}
